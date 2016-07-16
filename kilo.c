@@ -174,7 +174,7 @@ char *C_HL_keywords[] = {
 	/* Go types */
 	"uint8|","uint16|","uint32|","uint64|","int8|","int16|","int32|",
 	"int64|","float32|","float64|","complex64|","complex128|","byte|",
-	"rune|","uint","uintptr","string",NULL
+	"rune|","uint|","uintptr|","string|",NULL
 };
 
 /* Here we define an array of syntax highlights by extensions, keywords,
@@ -862,7 +862,7 @@ void abFree(struct abuf *ab) {
 }
 
 void clearScreen() {
-  const char* CLEAR_SCREE_ANSI = "\e[1;1H\e[2J";
+  const char* CLEAR_SCREE_ANSI = "\033[1;1H\033[2J";
   write(STDOUT_FILENO,CLEAR_SCREE_ANSI,12);
 }
 
