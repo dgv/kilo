@@ -861,6 +861,11 @@ void abFree(struct abuf *ab) {
     free(ab->b);
 }
 
+void clearScreen() {
+  const char* CLEAR_SCREE_ANSI = "\e[1;1H\e[2J";
+  write(STDOUT_FILENO,CLEAR_SCREE_ANSI,12);
+}
+
 /* This function writes the whole screen using VT100 escape characters
  * starting from the logical state of the editor in the global state 'E'. */
 void editorRefreshScreen(void) {
@@ -1190,6 +1195,7 @@ void editorProcessKeypress(int fd) {
             quit_times--;
             return;
         }
+	clearScreen();
         exit(0);
         break;
     case CTRL_S:        /* Ctrl-s */
