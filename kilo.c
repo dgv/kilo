@@ -266,7 +266,9 @@ int editorReadKey(int fd) {
                     if (read(fd,seq+2,1) == 0) return ESC;
                     if (seq[2] == '~') {
                         switch(seq[1]) {
+			case '1': return HOME_KEY;
                         case '3': return DEL_KEY;
+			case '4': return END_KEY;
                         case '5': return PAGE_UP;
                         case '6': return PAGE_DOWN;
                         }
@@ -1002,6 +1004,20 @@ void editorSetStatusMessage(const char *fmt, ...) {
 
 #define KILO_QUERY_LEN 256
 
+void startOfLine() {
+     int filerow = E.rowoff + E.cy;
+     erow *row = (filerow >= E.numrows) ? NULL : &E.row[filerow];
+     if (row)
+         E.cx = 0;
+}
+
+void endOfLine() {
+  int filerow = E.rowoff + E.cy;
+  erow *row = (filerow >= E.numrows) ? NULL : &E.row[filerow];
+  if (row)
+    E.cx = row->size;
+}
+
 void editorFind(int fd) {
     char query[KILO_QUERY_LEN+1] = {0};
     int qlen = 0;
@@ -1227,7 +1243,12 @@ void editorProcessKeypress(int fd) {
                                             ARROW_DOWN);
         }
         break;
-
+    case HOME_KEY:
+       startOfLine();
+       break;
+    case END_KEY:
+       endOfLine();
+       break;
     case ARROW_UP:
     case ARROW_DOWN:
     case ARROW_LEFT:
